@@ -29,16 +29,16 @@ func serve(c *net.TCPConn) {
 }
 
 func main() {
-    var port int = DEFAULT_PORT
-    var err error
-    
-    if len(os.Args) > 1 {
-        port, err = strconv.Atoi(os.Args[1])
-        if err != nil {
-            fmt.Println(err)
-            return
-        }
-    }
+	var port int = DEFAULT_PORT
+	var err error
+
+	if len(os.Args) > 1 {
+		port, err = strconv.Atoi(os.Args[1])
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+	}
 
 	face := fmt.Sprintf(":%d", port)
 	addr, err := net.ResolveTCPAddr("tcp4", face)
@@ -50,7 +50,7 @@ func main() {
 		panic(err)
 	}
 
-    fmt.Printf("rawipecho listening on port: %d\n", port)
+	fmt.Printf("rawipecho listening on port: %d\n", port)
 
 	for {
 		con, err := lis.AcceptTCP()
