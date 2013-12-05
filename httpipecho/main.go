@@ -25,11 +25,15 @@ func main() {
 	if len(os.Args) > 1 {
 		port, err = strconv.Atoi(os.Args[1])
 		if err != nil {
-			fmt.Println(err)
-			return
+			fmt.Fprintln(os.Stderr, err)
+			os.Exit(1)
 		}
 	}
 	fmt.Printf("httpipecho listen on port: %d\n", port)
 	http.HandleFunc("/", handler)
-	http.ListenAndServe(fmt.Sprintf(":%d", port), nil)
+	err = http.ListenAndServe(fmt.Sprintf(":%d", port), nil)
+	if err != nil {
+		fmt.Fprintln(os.Stderr, err)
+		os.Exit(1)
+	}
 }
