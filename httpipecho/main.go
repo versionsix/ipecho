@@ -2,20 +2,20 @@ package main
 
 import (
 	"fmt"
+	"net"
 	"net/http"
 	"os"
 	"strconv"
-	"strings"
 )
 
 const DEFAULT_PORT = 18888
 
 func handler(w http.ResponseWriter, req *http.Request) {
-	addr := strings.Split(req.RemoteAddr, ":")
-	if len(addr) > 0 {
-		fmt.Fprintf(w, addr[0])
+	addr, e := net.ResolveTCPAddr("tcp", req.RemoteAddr)
+	if e != nil {
+		fmt.Fprintf(w, "error: %s", addr)
 	} else {
-		fmt.Fprintf(w, "unknown")
+		fmt.Fprintf(w, addr.IP.String())
 	}
 }
 
@@ -29,7 +29,7 @@ func main() {
 			return
 		}
 	}
-	fmt.Printf("ipecho listen on port: %d\n", port)
+	fmt.Printf("httpipecho listen on port: %d\n", port)
 	http.HandleFunc("/", handler)
 	http.ListenAndServe(fmt.Sprintf(":%d", port), nil)
 }
